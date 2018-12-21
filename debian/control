@@ -1,0 +1,14 @@
+Source: libbmi088
+Section: base
+Priority: optional
+Maintainer: Peter Yang <turmary@126.com>
+Build-Depends: debhelper (>=9)
+Standards-Version: 3.9.6
+Homepage: https://github.com/turmary/bmi088-python
+
+Package: libbmi088
+Architecture: armhf
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Raspberry Pi BMI088 Library
+ BMI088 6-Axis Accelerometer & Gyroscope Control Library
+ for the Raspberry Pi.

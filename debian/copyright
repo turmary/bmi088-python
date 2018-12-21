@@ -1,0 +1,9 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: debhello
+Source: <url://example.com>
+
+Files:     Makefile
+           src/hello.c
+Copyright: 2016 Michinari.Nukazawa <michinari.nukazawa@gmail.com>
+License:   Undecided
+
