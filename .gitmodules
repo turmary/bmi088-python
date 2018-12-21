@@ -1,0 +1,4 @@
+[submodule "bosch-lib"]
+	path = bosch-lib
+	url = https://github.com/BoschSensortec/BMI08x-Sensor-API.git
+	branch = master
