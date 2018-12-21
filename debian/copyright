@@ -1,9 +1,12 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: debhello
-Source: <url://example.com>
+Upstream-Name: libbmi088
+Source: https://github.com/turmary/bmi088-python
 
-Files:     Makefile
-           src/hello.c
-Copyright: 2016 Michinari.Nukazawa <michinari.nukazawa@gmail.com>
-License:   Undecided
+Files:     src/main.c
+           src/rpi_bmi088.c
+           src/rpi_bmi088.h
+           Makefile
+           README.md
+Copyright: 2018 Peter Yang <turmary@126.com>
+License:   MIT
 
