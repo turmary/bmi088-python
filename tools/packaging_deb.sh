@@ -54,9 +54,9 @@ if [ "x${USE_GIT}" != "xyes" ];then
 else
 	pushd ${ROOT_DIR}
 	# git archive HEAD --output=${DEB_OBJECT_DIR}/${PACKAGE_DIR_NAME}.tar.gz
-	${SCRIPT_DIR}/git-archive-all.sh --format tar.gz -t HEAD ${DEB_OBJECT_DIR}/${PACKAGE_DIR_NAME}.tar.gz
+	${SCRIPT_DIR}/git-archive-all.sh --format tar.gz --prefix ${PACKAGE_DIR_NAME}/ -t HEAD ${DEB_OBJECT_DIR}/${PACKAGE_DIR_NAME}.tar.gz
 	popd
-	tar -zxvf ${PACKAGE_DIR_NAME}.tar.gz -C ${PACKAGE_DIR_NAME}/
+	tar -xvf ${PACKAGE_DIR_NAME}.tar.gz -C ./
 fi
 
 
