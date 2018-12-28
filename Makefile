@@ -17,13 +17,17 @@ srcdir := $(dir $(firstword ${MAKEFILE_LIST}))
 srcdir := $(shell cd ${srcdir}; pwd)
 
 OBJS_BMI088 = bmi088.o bmi08a.o bmi08g.o rpi_bmi088.o rpi_i2c.o
+OBJS_AKICM = rpi_icm20600.o rpi_ak09918.o rpi_i2c.o
 
 TST_BMI088   = test_bmi088
+TST_ICM20600 = test_icm20600
+TST_AK09918  = test_ak09918
 
 LIB_BMI088   = libbmi088.so
+LIB_AKICM    = libakicm.so
 
-TARGETS = $(TST_BMI088)
-LIBS    = $(LIB_BMI088)
+TARGETS = $(TST_BMI088) $(TST_ICM20600) $(TST_AK09918)
+LIBS    = $(LIB_BMI088) $(LIB_AKICM)
 
 
 # $(warning srcdir=$(srcdir))
@@ -39,16 +43,31 @@ all: $(TARGETS) $(LIBS)
 $(TST_BMI088): test_bmi088.o $(LIB_BMI088)
 	$(CC)  $(ALL_CFLAGS) -o $@ -L./ -lbmi088 -Wl,--rpath=./ $<
 
+$(TST_ICM20600): test_icm20600.o $(LIB_AKICM)
+	$(CC)  $(ALL_CFLAGS) -o $@ -L./ -lakicm -Wl,--rpath=./ $<
+
+$(TST_AK09918): test_ak09918.o $(LIB_AKICM)
+	$(CC)  $(ALL_CFLAGS) -o $@ -L./ -lakicm -Wl,--rpath=./ $<
+
 $(LIB_BMI088): $(OBJS_BMI088)
+	$(CC)  $(ALL_CFLAGS) --shared -o $@ $^
+
+$(LIB_AKICM): $(OBJS_AKICM)
 	$(CC)  $(ALL_CFLAGS) --shared -o $@ $^
 
 install: all
 	$(INSTALL) -D $(TST_BMI088) $(DESTDIR)$(prefix)/bin/$(TST_BMI088)
+	$(INSTALL) -D $(TST_ICM20600) $(DESTDIR)$(prefix)/bin/$(TST_ICM20600)
+	$(INSTALL) -D $(TST_AK09918) $(DESTDIR)$(prefix)/bin/$(TST_AK09918)
 	$(INSTALL) -D $(LIB_BMI088) $(DESTDIR)$(prefix)/lib/$(LIB_BMI088)
+	$(INSTALL) -D $(LIB_AKICM) $(DESTDIR)$(prefix)/lib/$(LIB_AKICM)
 
 uninstall:
 	-$(RM) $(DESTDIR)$(prefix)/bin/$(TST_BMI088)
+	-$(RM) $(DESTDIR)$(prefix)/bin/$(TST_AK09918)
+	-$(RM) $(DESTDIR)$(prefix)/bin/$(TST_ICM20600)
 	-$(RM) $(DESTDIR)$(prefix)/lib/$(LIB_BMI088)
+	-$(RM) $(DESTDIR)$(prefix)/lib/$(LIB_AKICM)
 
 clean:
 	-$(RM) *.o $(TARGETS) $(LIBS)
