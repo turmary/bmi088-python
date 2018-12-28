@@ -75,10 +75,10 @@ int main(int argc, const char* argv[]) {
 		printf("Sensor time: %5u\n",    tm);
 
 		rpi_bmi088_get_accel(rpi_bmi, &x, &y, &z);
-		printf("ACCEL X = %7.2lf Y = %7.2lf Z = %7.2lf\n", x, y, z);
+		printf("ACCEL X = %7.2lf mg Y = %7.2lf mg Z = %7.2lf mg\n", x, y, z);
 
 		rpi_bmi088_get_gyro(rpi_bmi, &x, &y, &z);
-		printf("GYRO  X = %7.2lf Y = %7.2lf Z = %7.2lf\n", x, y, z);
+		printf("GYRO  X = %7.2lfdps Y = %7.2lfdps Z = %7.2lfdps\n", x, y, z);
 
 		rpi_bmi->bmi.delay_ms(1000);
 	}

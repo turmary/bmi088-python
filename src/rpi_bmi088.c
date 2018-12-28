@@ -36,95 +36,10 @@
 #include <unistd.h>
 #include <linux/i2c-dev.h>
 #include "rpi_bmi088.h"
+#include "rpi_i2c.h"
 #include "bmi088.h"
 
 #define RAW_MAX		0x8000
-static int rpi_i2c_fd = -1;
-
-static int rpi_i2c_init(const char* dev_path) {
-	int fd;
-
-	if ((fd = rpi_i2c_fd) >= 0) {
-		return fd;
-	}
-
-	if ((fd = open(dev_path, O_RDWR)) < 0) {
-		printf("Failed to open i2c bus %s, error = %d\n", dev_path, fd);
-	} else {
-		rpi_i2c_fd = fd;
-	}
-	return fd;
-}
-
-// return none-zero = FAIL
-//        zero      = OK
-#define RPI_I2C_OK	0
-#define RPI_I2C_FAIL	-1
-static int8_t rpi_i2c_write(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint16_t len) {
-	uint8_t* buf = malloc(len + 1);
-	int rt;
-
-	if (buf == NULL || rpi_i2c_fd < 0) {
-		return RPI_I2C_FAIL;
-	}
-
-	if ((rt = ioctl(rpi_i2c_fd, I2C_SLAVE, dev_addr) < 0)) {
-		printf("Failed to talk to slave %02X, error = %d.\n", dev_addr, rt);
-		return RPI_I2C_FAIL;
-	}
-
-	buf[0] = reg_addr;
-	memcpy(buf + 1, data, len);
-
-	if ((rt = write(rpi_i2c_fd, buf, len + 1)) != len + 1) {
-		printf("Failed to write i2c bus %u bytes with error = %d.\n",
-		       len + 1, rt);
-		rt = RPI_I2C_FAIL;
-	} else {
-		rt = RPI_I2C_OK;
-	}
-
-	free(buf);
-	return rt;
-}
-
-// return none-zero = FAIL
-//        zero      = OK
-static int8_t rpi_i2c_read(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint16_t len) {
-	int rt;
-
-	if (rpi_i2c_fd < 0) {
-		return RPI_I2C_FAIL;
-	}
-
-	if ((rt = ioctl(rpi_i2c_fd, I2C_SLAVE, dev_addr) < 0)) {
-		printf("Failed to talk to slave %02X, error = %d.\n", dev_addr, rt);
-		return RPI_I2C_FAIL;
-	}
-
-	#if _DEBUG
-	/*
-	 * fprintf(stderr, "dev: 0x%02X  reg: 0x%02X\n", dev_addr, reg_addr);
-	 */
-	#endif
-
-	if ((rt = write(rpi_i2c_fd, &reg_addr, 1)) != 1) {
-		printf("Failed to write (then read) i2c bus addr 0x%02X with error = %d.\n",
-		       reg_addr, rt);
-		return RPI_I2C_FAIL;
-	}
-
-	if ((rt = read(rpi_i2c_fd, data, len)) != len) {
-		printf("Failed to read from i2c bus with error = %d.\n", rt);
-		return RPI_I2C_FAIL;
-	}
-	return RPI_I2C_OK;
-}
-
-static void rpi_delay_ms(uint32_t millis) {
-	usleep(millis * 1000UL);
-	return;
-}
 
 void* rpi_bmi088_alloc(void) {
 	return malloc(sizeof(rpi_bmi088_t));
@@ -214,6 +129,8 @@ int rpi_bmi088_init(
 
 	/* Read the accel power mode */
 	pwr_mode = bmi08a_get_power_mode(&dev->bmi);
+	/* prevent warning */
+	pwr_mode = pwr_mode;
 
 	range = (accel->range > BMI088_ACCEL_RANGE_24G)?
 		BMI088_ACCEL_RANGE_24G: accel->range;
