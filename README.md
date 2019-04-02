@@ -1,9 +1,14 @@
+## Prepare submodule bosch-lib/
+```bash
+git submodule init
+git submodule update
+```
 
 ## Usage
 To generate debian package under folder deobj/
 ```bash
 # preparation
-sudo apt-get install debhelper dh-make debmake devscripts
+sudo apt-get install debhelper dh-make debmake devscripts fakeroot
 
 # packaging
 # using git tree lastest files

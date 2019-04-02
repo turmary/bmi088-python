@@ -40,7 +40,7 @@ mkdir -p ${DEB_OBJECT_DIR}
 pushd ${DEB_OBJECT_DIR}
 mkdir -p ${PACKAGE_DIR_NAME}
 
-if [ "x${USE_GIT}" != "xyes" ];then
+if [ "x${USE_GIT}" != "xyes" ]; then
 	## not git repository
 	echo "########################################################################"
 	echo "#################### Using working copy without GIT ####################"
@@ -71,6 +71,6 @@ cp ${DEB_OVERWRITE}/debian/*     debian/
 echo "------ debbuild ------"
 debuild -us -uc
 
-[ -f ../${APP_NAME}_${VERSION}-1_armhf.deb ]
+[ -f ../${APP_NAME}_${VERSION}-1_*.deb ]
 
 

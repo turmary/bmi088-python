@@ -7,8 +7,9 @@ Standards-Version: 3.9.6
 Homepage: https://github.com/turmary/bmi088-python
 
 Package: libbmi088
-Architecture: armhf
+Architecture: armhf arm64
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: Raspberry Pi BMI088 Library
  BMI088 6-Axis Accelerometer & Gyroscope Control Library
  for the Raspberry Pi.
+
