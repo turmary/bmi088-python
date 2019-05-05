@@ -41,13 +41,13 @@ all: $(TARGETS) $(LIBS)
 
 # option -Wl,--rpath=./ used by bmi088_test under developing environment
 $(TST_BMI088): test_bmi088.o $(LIB_BMI088)
-	$(CC)  $(ALL_CFLAGS) -o $@ -L./ -lbmi088 -Wl,--rpath=./ $<
+	$(CC)  $(ALL_CFLAGS) -o $@ -L./ -Wl,-\( -lbmi088 -Wl,--rpath=./ $< -Wl,-\)
 
 $(TST_ICM20600): test_icm20600.o $(LIB_AKICM)
-	$(CC)  $(ALL_CFLAGS) -o $@ -L./ -lakicm -Wl,--rpath=./ $<
+	$(CC)  $(ALL_CFLAGS) -o $@ -L./ -Wl,-\( -lakicm -Wl,--rpath=./ $< -Wl,-\)
 
 $(TST_AK09918): test_ak09918.o $(LIB_AKICM)
-	$(CC)  $(ALL_CFLAGS) -o $@ -L./ -lakicm -Wl,--rpath=./ $<
+	$(CC)  $(ALL_CFLAGS) -o $@ -L./ -Wl,-\( -lakicm -Wl,--rpath=./ $< -Wl,-\)
 
 $(LIB_BMI088): $(OBJS_BMI088)
 	$(CC)  $(ALL_CFLAGS) --shared -o $@ $^
